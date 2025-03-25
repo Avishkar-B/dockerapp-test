@@ -22,7 +22,8 @@ jobs:
       - run:
           name: Upgrade pip
           command: |
-            python3 -m pip install --upgrade pip
+            # python3 -m pip install --upgrade pip
+            echo 'no install pip'
 
       # Run tests
       - run:
