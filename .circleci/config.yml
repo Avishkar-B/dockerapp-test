@@ -11,6 +11,7 @@ jobs:
           name: Install dependencies
           command: |
             apk add --no-cache py-pip=9.0.0-r1
+            python -m pip install --upgrade pip
             pip install docker-compose
       - run:
           name: Run tests
