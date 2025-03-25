@@ -12,18 +12,17 @@ jobs:
       - setup_remote_docker:
           docker_layer_caching: true # Enable layer caching for faster builds
 
-      # Install Python and pip
+      # Install Python, pip, and Docker Compose
       - run:
-          name: Install Python and pip
+          name: Install Python, pip, and Docker Compose
           command: |
-            apk add --no-cache python3 py3-pip
+            apk add --no-cache python3 py3-pip docker-compose
 
-      # Upgrade pip and install dependencies with --break-system-packages
+      # Upgrade pip and install any additional Python dependencies if needed
       - run:
-          name: Install docker-compose
+          name: Upgrade pip
           command: |
             python3 -m pip install --upgrade pip
-            pip install docker-compose --trusted-host pypi.python.org --trusted-host pypi.org --trusted-host files.pythonhosted.org --break-system-packages
 
       # Run tests
       - run:
