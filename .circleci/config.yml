@@ -4,13 +4,12 @@ jobs:
   build:
     working_directory: ~/dockerapp
     docker:
-      - image: docker:20.10.7 # Use a more recent Docker image
+      - image: docker:28 # Use a more recent Docker image
     steps:
       - checkout
 
       # Set up remote Docker for building images
       - setup_remote_docker:
-          version: 20.10.7
           docker_layer_caching: true # Enable layer caching for faster builds
 
       # Install Python and pip
