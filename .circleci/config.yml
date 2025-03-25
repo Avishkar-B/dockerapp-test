@@ -1,19 +1,41 @@
-version: 2
+version: 2.1 # Use version 2.1 for additional features
+
 jobs:
   build:
-    working_directory: /dockerapp
+    working_directory: ~/dockerapp
     docker:
-      - image: docker:28
+      - image: docker:20.10.7 # Use a more recent Docker image
     steps:
       - checkout
-      - setup_remote_docker
+
+      # Set up remote Docker for building images
+      - setup_remote_docker:
+          version: 20.10.7
+          docker_layer_caching: true # Enable layer caching for faster builds
+
+      # Install Python and pip
       - run:
-          name: Install dependencies
+          name: Install Python and pip
           command: |
-            apk add --no-cache py-pip
-            pip install docker-compose
+            apk add --no-cache python3 py3-pip
+
+      # Upgrade pip and install dependencies with --break-system-packages
+      - run:
+          name: Install docker-compose
+          command: |
+            python3 -m pip install --upgrade pip
+            pip install docker-compose --trusted-host pypi.python.org --trusted-host pypi.org --trusted-host files.pythonhosted.org --break-system-packages
+
+      # Run tests
       - run:
           name: Run tests
           command: |
             docker-compose up -d
             docker-compose run dockerapp python test.py
+            docker-compose down  # Clean up after tests
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build
